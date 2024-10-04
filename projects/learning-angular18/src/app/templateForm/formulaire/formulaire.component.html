@@ -4,25 +4,126 @@
     </div>
     <div class="card-body">
         <!-- <form (ngSubmit)="saveFromData()"> -->
-        <form (ngSubmit)="saveFromData(registerForm)" #registerForm="ngForm">
+<!-- novalidate demande au formulaire de ne pas se valider avec la validation html mais avec angular -->
+        <form novalidate (ngSubmit)="saveFromData(registerForm)" #registerForm="ngForm">
+
             <div class="row mb-3">
                 <div class="col-md-6 mb-3">
                     <label>Nom :</label>
-                    <input type="text" class="form-control" [(ngModel)]="user.nom" name="nom"/>
+                    <input type="text" class="form-control" 
+                    [(ngModel)]="user.nom" name="nom" 
+                    required minlength="4" maxlength="28"
+                    pattern="[a-zA-Z ]*"
+                    
+                    #nomNgForm="ngModel"
+                    [ngClass]="{'is-invalid': nomNgForm.touched && !nomNgForm.valid}"
+                    >
+
+                    <div class="invalid-feedback" *ngIf="nomNgForm.errors?.['required']">
+                        <span>
+                                Entrez votre Nom de Famille 
+                        </span>
                     </div>
+                    <div class="invalid-feedback" *ngIf="nomNgForm.errors?.['pattern']">
+                        <span>
+                               Seul les lettres de l'alphabet sont acceptées
+                        </span>
+                    </div>
+                    <div class="invalid-feedback" *ngIf="(nomNgForm.errors?.['minlength']  || prenomNgForm.errors?.['maxlength'])">
+                        <span>
+                                Entre 4 et 28 caractères
+                        </span>
+                    </div>
+                </div>
                 <div class="col-md-6 mb-3">
                     <label>Prénom :</label>
-                    <input type="text" class="form-control" [(ngModel)]="user.prenom" name="prenom"/>
+                    <input type="text" class="form-control" 
+                    [(ngModel)]="user.prenom" name="prenom" 
+                    required minlength="4" maxlength="21"
+                    pattern="[a-zA-Z ]*"
+
+                    #prenomNgForm="ngModel"
+                    [ngClass]="{'is-invalid': prenomNgForm.touched && !prenomNgForm.valid}"
+                    >
+
+                    <div class="invalid-feedback" *ngIf="prenomNgForm.errors?.['required']">
+                        <span>
+                                Entrez votre Prénom
+                        </span>
+                    </div>
+                    <div class="invalid-feedback" *ngIf="prenomNgForm.errors?.['pattern']">
+                        <span>
+                               Seul les lettres de l'alphabet sont acceptées
+                        </span>
+                    </div>
+                    <div class="invalid-feedback" *ngIf="(prenomNgForm.errors?.['minlength'] || prenomNgForm.errors?.['maxlength'])">
+                        <span>
+                                Entre 4 et 21 caractères
+                        </span>
+                    </div>
+
                 </div>
             </div>
-        <div class="col-md-6 mb-3">
-            <label>Email :</label>
-            <input type="email" class="form-control" [(ngModel)]="user.email" name="email"/>
-        </div>
-        <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-outline-success ml-auto">Sauvegarder
-        </button>
-        </div>
+            
+                    <div class="col-md- mb-3">
+                        <label>Email :</label>
+                        <input type="email" class="form-control" 
+                        [(ngModel)]="user.email" name="email" 
+                        required
+                        ngModel email="true"
+
+                        #emailNgForm="ngModel"
+                        [ngClass]="{'is-invalid': emailNgForm.touched && !emailNgForm.valid}"
+                        >
+
+                            <div class="invalid-feedback" *ngIf="emailNgForm.errors?.['required']">
+                                <span>
+                                        L'adresse mail est Obligatoire
+                                </span>
+                            </div>
+                            <div class="invalid-feedback" *ngIf="emailNgForm.errors?.['email']">
+                                <span>
+                                        L'adresse mail n'est pas valide
+                                </span>
+                            </div>
+                        <!-- <div class="invalid-feedback" *ngIf="nomNgForm.errors?.['pattern']">
+                            <span>
+                                Seul les lettres de l'alphabet sont acceptées
+                            </span>
+                        </div> -->
+                        
+                    </div>
+            <div class="row mb-3">
+                <div class="col-md-6 mb-3">
+                    <label>Mot de passe :</label>
+                    <input type="password" class="form-control"
+                    [(ngModel)]="user.password" name="password" 
+                    required
+                    >
+                </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Confirmation :</label>
+                        <input type="password" class="form-control"
+                        [(ngModel)]="user.confirmPass" name="confirmPass" 
+                        required
+                        >
+                    </div>
+            </div>
+            
+            <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-outline-success ml-auto">Sauvegarder
+            </button>
+            </div>
+
         </form>
     </div>
 </div>
+
+
+
+<!-- 
+<div class="invalid-feedback" *ngIf="(passwordNgForm.errors?.['minlength']||passwordNgForm.errors?.['maxlength'])">
+    <span>
+            Entre 15 et 64 caractères
+    </span>
+</div> -->

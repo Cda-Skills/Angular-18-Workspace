@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule, NgForm} from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-formulaire',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './formulaire.component.html',
   styleUrl: './formulaire.component.css'
 })
