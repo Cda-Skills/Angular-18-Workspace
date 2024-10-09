@@ -3,5 +3,5 @@ export class User {
     public nom !: string;
     public email !: string;
     public password !: string;
-    confirmPass !: string;
+    public confirmPass !: string;
 }

@@ -5,7 +5,7 @@
     <div class="card-body">
         <!-- <form (ngSubmit)="saveFromData()"> -->
 <!-- novalidate demande au formulaire de ne pas se valider avec la validation html mais avec angular -->
-        <form novalidate (ngSubmit)="saveFromData(registerForm)" #registerForm="ngForm">
+        <form novalidate (ngSubmit)="saveFromData(registerForm)" #registerForm="ngForm" appCustomPassValidator>
 
             <div class="row mb-3">
                 <div class="col-md-6 mb-3">
@@ -16,7 +16,7 @@
                     pattern="[a-zA-Z ]*"
                     
                     #nomNgForm="ngModel"
-                    [ngClass]="{'is-invalid': nomNgForm.touched && !nomNgForm.valid}"
+                    [ngClass]="{'is-invalid': (nomNgForm.touched || nomNgForm.dirty) && nomNgForm.invalid  }"
                     >
 
                     <div class="invalid-feedback" *ngIf="nomNgForm.errors?.['required']">
@@ -43,7 +43,7 @@
                     pattern="[a-zA-Z ]*"
 
                     #prenomNgForm="ngModel"
-                    [ngClass]="{'is-invalid': prenomNgForm.touched && !prenomNgForm.valid}"
+                    [ngClass]="{'is-invalid': (prenomNgForm.touched || prenomNgForm.dirty) && !prenomNgForm.valid }"
                     >
 
                     <div class="invalid-feedback" *ngIf="prenomNgForm.errors?.['required']">
@@ -71,9 +71,10 @@
                         [(ngModel)]="user.email" name="email" 
                         required
                         ngModel email="true"
-
+                        pattern="^[^\W][a-zA-Z0-9\-\._]+[^\W]@[^\W][a-zA-Z0-9\-\._]+[^\W]\.[a-zA-Z]{2,6}$"
+                        
                         #emailNgForm="ngModel"
-                        [ngClass]="{'is-invalid': emailNgForm.touched && !emailNgForm.valid}"
+                        [ngClass]="{'is-invalid': (emailNgForm.touched || emailNgForm.dirty) && !emailNgForm.valid }"
                         >
 
                             <div class="invalid-feedback" *ngIf="emailNgForm.errors?.['required']">
@@ -81,16 +82,12 @@
                                         L'adresse mail est Obligatoire
                                 </span>
                             </div>
-                            <div class="invalid-feedback" *ngIf="emailNgForm.errors?.['email']">
+                            <div class="invalid-feedback" *ngIf="(emailNgForm.errors?.['email'] || nomNgForm.errors?.['pattern'])">
                                 <span>
                                         L'adresse mail n'est pas valide
                                 </span>
                             </div>
-                        <!-- <div class="invalid-feedback" *ngIf="nomNgForm.errors?.['pattern']">
-                            <span>
-                                Seul les lettres de l'alphabet sont acceptées
-                            </span>
-                        </div> -->
+                       
                         
                     </div>
             <div class="row mb-3">
@@ -98,22 +95,75 @@
                     <label>Mot de passe :</label>
                     <input type="password" class="form-control"
                     [(ngModel)]="user.password" name="password" 
-                    required
+                    required [minLength]="12"
+                    pattern ="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{12,}$"
+
+                    #passwordNgForm="ngModel"
+                    [ngClass]="{'is-invalid': (passwordNgForm.touched || passwordNgForm.dirty) && !passwordNgForm.valid  }"
                     >
+
+                            <div class="invalid-feedback" *ngIf="passwordNgForm.errors?.['required']">
+                                <span>
+                                        Un mot de passe est Obligatoire
+                                </span>
+                            </div>
+                            <div class="invalid-feedback" *ngIf=" ( passwordNgForm.errors?.['minlength'] || passwordNgForm.errors?.['pattern'] )">
+                                <span>
+                                        <h2>12 Caractères Minimum : </h2>
+                                        <p style="color:black">Celui-ci doit être complexe : 1 chiffre, 1 minuscule, 1 majuscule</p>
+                                        <p style="color:black">et 1 caractère spécial : &#64; # $ % ^ & + = </p>
+                                </span>
+                            </div>
                 </div>
+
                     <div class="col-md-6 mb-3">
                         <label>Confirmation :</label>
                         <input type="password" class="form-control"
-                        [(ngModel)]="user.confirmPass" name="confirmPass" 
-                        required
+                        [(ngModel)]="user.confirmPass" name="confirmPass"
+                        required ngModel
+                        #confirmPassNgForm="ngModel"
+                        [ngClass]="{'is-invalid': confirmPassNgForm.value !== passwordNgForm.value  }"
+                        
                         >
+ 
+                    <!-- <div *ngIf="passConfirmNgForm.invalid"> -->
+                            <div class="invalid-feedback"  *ngIf=" confirmPassNgForm.value !== passwordNgForm.value && (confirmPassNgForm.touched || confirmPassNgForm.dirty)">
+                                <span>
+                                    Les mots de passe ne sont pas identique !
+                            </span>
+                            </div>
+                            <!-- Required is good! -->
+                            <div class="invalid-feedback"  *ngIf="confirmPassNgForm.errors?.['required']">
+                                <span>
+                                    Vous devez Confirmer votre mot de passe
+                                </span>
+                            </div>
+                            <div *ngIf="confirmPassNgForm.value !== passwordNgForm.value; then thenTemplate; else elseTemplate">
+                            </div>
+                            <ng-template #thenTemplate>
+                                <br>
+                                <!-- Si valide : -->
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" [disabled]=" registerForm.valid"  class="btn btn-outline-success ml-auto">Sauvegarder</button>
+                                </div>
+                            </ng-template><ng-template #elseTemplate>
+                                <br>
+                                <!-- Si pas valide : -->
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" [disabled]=" !registerForm.valid"  class="btn btn-outline-success ml-auto">Sauvegarder</button>
+                                </div>
+                            </ng-template>
+                        
+                        <div class="invalid-feedback" >
+                            
+                        </div>
+                       
+                            
                     </div>
+                
             </div>
+
             
-            <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-outline-success ml-auto">Sauvegarder
-            </button>
-            </div>
 
         </form>
     </div>
@@ -127,3 +177,20 @@
             Entre 15 et 64 caractères
     </span>
 </div> -->
+
+
+<!-- pattern="^[^\W][a-zA-Z0-9\-\._]+[^\W]@[^\W][a-zA-Z0-9\-\._]+[^\W]\.[a-zA-Z]{2,6}$" -->
+
+<!-- mot de passe:
+pattern ="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$" -->
+<!-- ^                 # début de la chaîne de caractères
+(?=.*[0-9])       # un chiffre doit apparaître au moins une fois
+(?=.*[a-z])       # une lettre minuscule doit apparaître au moins une fois
+(?=.*[A-Z])       # une lettre majuscule doit apparaître au moins une fois
+(?=.*[@#$%^&+=])  # un caractère spécial doit apparaître au moins une fois
+(?=\S+$)          # aucun espace blanc n'est autorisé dans la chaîne entière
+.{8,}             # n'importe quoi, au moins 8 caractères
+$                 # fin de la chaîne de caractères -->
+
+
+<!-- [ngClass]="{'is-invalid': (passConfirmNgForm.control.value !== passNgForm.control.value)}" -->

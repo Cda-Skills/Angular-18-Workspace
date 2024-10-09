@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
-import { FormsModule, NgForm} from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { FormsModule, NgForm } from '@angular/forms';
+import { CommonModule} from '@angular/common';
+
 
 @Component({
   selector: 'app-formulaire',
@@ -13,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class FormulaireComponent implements OnInit{
 
   user: User = new User();
+
 
   ngOnInit(): void {}
 
@@ -28,9 +30,17 @@ export class FormulaireComponent implements OnInit{
 
   saveFromData(registerForm: NgForm){
     console.log('Le bouton fonctionne');
-    console.log(this.user);
-    console.log(registerForm.form);
-    console.log('valeurs:',JSON.stringify(registerForm.value));
+    // console.log(this.user);
+    // console.log(registerForm.form);
+    // console.log('valeurs:',JSON.stringify(registerForm.value));
+    console.log(registerForm);
+    if (registerForm.invalid) {
+      return;
   }
 
+  alert('SUCCESS!! :-)\n\n' + JSON.stringify(registerForm.value, null, 4));
+  }
+
+
+  
 }

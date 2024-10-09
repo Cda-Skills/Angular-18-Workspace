@@ -1,0 +1,9 @@
+ALGO :
+
+- Creer une regle de validation
+- required
+- customValidator
+- Récuperer les valeurs des deux inputs
+- Les comparer
+- Selon le résultat : valider ou non le formulaire
+
