@@ -6,4 +6,5 @@ ALGO :
 - Récuperer les valeurs des deux inputs
 - Les comparer
 - Selon le résultat : valider ou non le formulaire
+(si le résultat retourne "null" alors la validation est OK)
 

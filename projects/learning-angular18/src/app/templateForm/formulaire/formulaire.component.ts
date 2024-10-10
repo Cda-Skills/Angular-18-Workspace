@@ -22,23 +22,16 @@ export class FormulaireComponent implements OnInit{
 
   }
 
-  // saveFromData(){
-  //   console.log('Le bouton fonctionne');
-  //   console.log(this.user);
-  
-  // }
-
   saveFromData(registerForm: NgForm){
     console.log('Le bouton fonctionne');
-    // console.log(this.user);
+    console.log(this.user);
     // console.log(registerForm.form);
-    // console.log('valeurs:',JSON.stringify(registerForm.value));
-    console.log(registerForm);
+    console.log(registerForm.value);
     if (registerForm.invalid) {
       return;
   }
 
-  alert('SUCCESS!! :-)\n\n' + JSON.stringify(registerForm.value, null, 4));
+  // alert('SUCCESS!! :-)\n\n' + JSON.stringify(registerForm.value, null, 4));
   }
 
 
